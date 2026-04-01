@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>NISHIKI dev — Developer Portfolio</title>
-    <meta name="description" content="Fullstack разработчик. Frontend, Backend, Apps, Scripts, Roblox.">
+    <meta name="description" content="Fullstack разработчик. Frontend, Backend, Apps, Scripts, Roblox, Photo/Video Editing.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,12 @@
             scroll-behavior: smooth;
             scroll-padding-top: 80px;
             overflow-x: hidden;
+        }
+
+        @media (max-width: 768px) {
+            html {
+                scroll-behavior: auto;
+            }
         }
 
         body {
@@ -78,7 +84,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
+            z-index: 9999;
             background: rgba(10, 11, 15, 0.3);
             backdrop-filter: blur(30px) saturate(200%);
             -webkit-backdrop-filter: blur(30px) saturate(200%);
@@ -324,7 +330,7 @@
         }
 
         #services {
-            padding-top: 12rem;
+            padding-top: 8rem;
         }
 
         .section-header {
@@ -397,14 +403,41 @@
             border: 1px solid rgba(79, 143, 247, 0.15);
             border-radius: 6px;
             padding: 1.5rem 1.8rem;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            perspective: 1000px;
         }
 
         .service-card:hover {
             background: rgba(26, 29, 38, 0.3);
-            border-color: rgba(79, 143, 247, 0.4);
-            transform: scale(1.02);
+            border-color: rgba(79, 143, 247, 0.15);
+            transform: translateY(-5px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 0 10px 30px rgba(79, 143, 247, 0.15), 0 0 20px rgba(79, 143, 247, 0.1);
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            transition: all 0.4s ease;
+            filter: drop-shadow(0 0 0 transparent);
+        }
+
+        .service-icon.icon-large {
+            width: 70px;
+            height: 70px;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(79, 143, 247, 0.5));
+        }
+
+        .service-content {
+            text-align: center;
         }
 
         .service-title {
@@ -444,8 +477,8 @@
         }
 
         .portfolio-card:hover {
-            border-color: rgba(79, 143, 247, 0.4);
-            box-shadow: 0 4px 20px rgba(79, 143, 247, 0.15);
+            border-color: rgba(79, 143, 247, 0.15);
+            box-shadow: 0 8px 30px rgba(79, 143, 247, 0.2), 0 0 20px rgba(79, 143, 247, 0.1);
             transform: translateY(-3px);
         }
 
@@ -613,6 +646,29 @@
         }
 
         @media (max-width: 768px) {
+            /* Отключаем тяжелые анимации на мобильных */
+            .hero-title,
+            .hero-subtitle-dev,
+            .service-card,
+            .payment-item,
+            .contact-item {
+                transition: none !important;
+            }
+
+            .service-icon {
+                transition: none !important;
+            }
+
+            .service-card:hover .service-icon {
+                transform: none !important;
+            }
+
+            /* Убираем hover эффекты на мобильных */
+            .hero-title:hover,
+            .hero-subtitle-dev:hover {
+                filter: none !important;
+            }
+
             nav {
                 padding: 1rem;
             }
@@ -632,6 +688,7 @@
                 opacity: 0;
                 transition: all 0.3s ease;
                 pointer-events: none;
+                z-index: 9998;
             }
 
             .nav-links.active {
@@ -705,7 +762,7 @@
                     <h1 class="hero-title">NISHIKI</h1>
                     <div class="hero-subtitle-dev">DEV</div>
                 </div>
-                <p class="hero-description">Frontend, Backend, Apps, Scripts, Roblox places</p>
+                <p class="hero-description">Frontend, Backend, Apps, Scripts, Roblox, Photo/Video Editing</p>
                 <div class="scroll-indicator">
                     <div class="scroll-arrow"></div>
                     <div class="scroll-arrow"></div>
@@ -719,14 +776,17 @@
                 <p class="section-subtitle">Краткая информация обо мне и моей деятельности</p>
             </div>
             <div class="about-content">
-                <p class="about-text">Fullstack разработчик. Создаю сайты, боты, приложения и скрипты.</p>
+                <p class="about-text">Fullstack разработчик. Создаю сайты, боты, приложения и скрипты. Работаю с фото и видео редакторами.</p>
                 <div class="about-tech">
                     <span class="tech-badge">Python</span>
                     <span class="tech-badge">JavaScript</span>
                     <span class="tech-badge">HTML</span>
                     <span class="tech-badge">CSS</span>
                     <span class="tech-badge">SQL</span>
-                    <span class="tech-badge">Roblox Lua</span>
+                    <span class="tech-badge">Roblox</span>
+                    <span class="tech-badge">Lua</span>
+                    <span class="tech-badge">After Effects</span>
+                    <span class="tech-badge">Photoshop</span>
                 </div>
             </div>
         </section>
@@ -738,20 +798,46 @@
             </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <h3 class="service-title">Разработка Сайтов (Frontend/Backend)</h3>
-                    <p class="service-description">Создание современных сайтов и веб-сервисов с клиентской и серверной частью</p>
+                    <img src="svg's/photoshop.svg" alt="Photoshop" class="service-icon">
+                    <div class="service-content">
+                        <h3 class="service-title">Adobe Photoshop</h3>
+                        <p class="service-description">Обработка изображений, дизайн интерфейсов и графики</p>
+                    </div>
                 </div>
                 <div class="service-card">
-                    <h3 class="service-title">Разработка плейсов в Roblox</h3>
-                    <p class="service-description">Создание и настройка игровых плейсов, механик и контента</p>
+                    <img src="svg's/ae.svg" alt="After Effects" class="service-icon">
+                    <div class="service-content">
+                        <h3 class="service-title">Adobe After Effects</h3>
+                        <p class="service-description">Создание анимаций, моушн-дизайн и видеоэффекты</p>
+                    </div>
                 </div>
                 <div class="service-card">
-                    <h3 class="service-title">Разработка приложений</h3>
-                    <p class="service-description">Разработка удобных и современных приложений под разные задачи</p>
+                    <img src="svg's/code.svg" alt="Web Development" class="service-icon">
+                    <div class="service-content">
+                        <h3 class="service-title">Разработка Сайтов (Frontend/Backend)</h3>
+                        <p class="service-description">Создание современных сайтов и веб-сервисов с клиентской и серверной частью</p>
+                    </div>
                 </div>
                 <div class="service-card">
-                    <h3 class="service-title">Разработка скриптов</h3>
-                    <p class="service-description">Написание автоматизаций, утилит и кастомных скриптов под нужды клиента</p>
+                    <img src="svg's/roblox.svg" alt="Roblox" class="service-icon icon-large">
+                    <div class="service-content">
+                        <h3 class="service-title">Разработка плейсов в Roblox</h3>
+                        <p class="service-description">Создание и настройка игровых плейсов, механик и контента</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="svg's/app.svg" alt="Apps" class="service-icon icon-large">
+                    <div class="service-content">
+                        <h3 class="service-title">Разработка приложений</h3>
+                        <p class="service-description">Разработка удобных и современных приложений под разные задачи</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="svg's/script.svg" alt="Scripts" class="service-icon">
+                    <div class="service-content">
+                        <h3 class="service-title">Разработка скриптов</h3>
+                        <p class="service-description">Написание автоматизаций, утилит и кастомных скриптов под нужды клиента</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -854,6 +940,13 @@
         
         function smoothScrollTo(target, duration = 1000) {
             console.log('smoothScrollTo called for:', target);
+            
+            // На мобильных используем нативный скролл
+            if (window.innerWidth <= 768) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+            
             const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
             const startPosition = window.pageYOffset;
             const distance = targetPosition - startPosition;
