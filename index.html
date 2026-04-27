@@ -7,6 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>NISHIKI dev — Developer Portfolio</title>
+    <!-- Updated: 2026-04-27 -->
     <meta name="description" content="Fullstack разработчик. Frontend, Backend, Apps, Scripts, Roblox, Photo & Video Editing.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +52,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
+            position: relative;
         }
 
         ::selection {
@@ -73,10 +75,7 @@
             bottom: 0;
             pointer-events: none;
             z-index: 0;
-            background: 
-                radial-gradient(ellipse at top left, rgba(79, 143, 247, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at center, rgba(59, 158, 255, 0.03) 0%, transparent 50%);
+            background: transparent;
         }
 
         header {
@@ -185,8 +184,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            opacity: 0.4;
+            opacity: 0;
             pointer-events: none;
+            display: none;
         }
 
         .hero-content {
@@ -546,6 +546,17 @@
             filter: drop-shadow(0 0 15px rgba(79, 143, 247, 0.6));
         }
 
+        /* Специальное свечение для FunPay */
+        .payment-item img[alt="FunPay"] {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 8px rgba(200, 200, 200, 0.4));
+        }
+
+        .payment-item:hover img[alt="FunPay"] {
+            filter: drop-shadow(0 0 8px rgba(200, 200, 200, 0.6)) drop-shadow(0 0 15px rgba(79, 143, 247, 0.6));
+        }
+
         .payment-name {
             font-size: 0.95rem;
             font-weight: 500;
@@ -567,6 +578,476 @@
             background: var(--bg-secondary);
             border-radius: 8px;
             border: 1px solid var(--border-color);
+        }
+
+        /* Стили для галереи */
+        .gallery-card {
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 11, 15, 0.95);
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background: rgba(79, 143, 247, 0.1);
+        }
+
+        .gallery-upload-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        .gallery-upload-form {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .upload-area {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-label:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(79, 143, 247, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+        }
+
+        .gallery-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .gallery-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .gallery-upload-btn {
+            padding: 0.8rem 2rem;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .gallery-upload-btn:hover {
+            background: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(79, 143, 247, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(10, 11, 15, 0.9), transparent);
+            padding: 1rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item-title {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .gallery-delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 59, 48, 0.9);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .gallery-item:hover .gallery-delete-btn {
+            opacity: 1;
+        }
+
+        .gallery-delete-btn:hover {
+            background: rgba(255, 59, 48, 1);
+            transform: scale(1.05);
+        }
+
+        .gallery-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .gallery-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Модальное окно просмотра изображения */
+        .image-viewer-modal {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .image-viewer-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .image-viewer-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+
+        .image-viewer-modal img.swipe-left {
+            animation: swipeOutLeft 0.3s ease forwards;
+        }
+
+        .image-viewer-modal img.swipe-right {
+            animation: swipeOutRight 0.3s ease forwards;
+        }
+
+        .image-viewer-modal img.swipe-in-left {
+            animation: swipeInLeft 0.3s ease forwards;
+        }
+
+        .image-viewer-modal img.swipe-in-right {
+            animation: swipeInRight 0.3s ease forwards;
+        }
+
+        @keyframes swipeOutLeft {
+            to {
+                transform: translateX(-100%) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeOutRight {
+            to {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeInLeft {
+            from {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes swipeInRight {
+            from {
+                transform: translateX(-100%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .viewer-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            z-index: 10001;
+        }
+
+        .viewer-title {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 11, 15, 0.9);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            animation: slideUp 0.4s ease 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Навигация по галерее */
+        .viewer-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10001;
+            user-select: none;
+            padding: 1rem;
+            opacity: 0.6;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .viewer-nav:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.2);
+            color: var(--accent-cyan);
+            text-shadow: 0 0 20px rgba(79, 143, 247, 0.8);
+        }
+
+        .viewer-nav.prev {
+            left: 2rem;
+        }
+
+        .viewer-nav.next {
+            right: 2rem;
+        }
+
+        .viewer-counter {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 11, 15, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            z-index: 10001;
+        }
+
+        .admin-toggle {
+            text-align: center;
+            margin-top: 3rem;
+            display: none;
+        }
+
+        .admin-toggle.visible {
+            display: block;
+        }
+
+        .admin-btn {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .admin-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .gallery-upload-form {
+                flex-direction: column;
+            }
+
+            .upload-area,
+            .gallery-input {
+                width: 100%;
+            }
         }
 
         .contact-content {
@@ -847,6 +1328,7 @@
                 <h2 class="section-title">Портфолио</h2>
                 <p class="section-subtitle">Проекты и работы</p>
             </div>
+
             <div class="portfolio-grid">
                 <a href="https://t.me/research_university_bot" target="_blank" class="portfolio-card">
                     <h3 class="portfolio-title">Research University Bot</h3>
@@ -858,8 +1340,62 @@
                         <span class="tech-tag">SQL</span>
                     </div>
                 </a>
+
+                <div class="portfolio-card gallery-card" onclick="openGallery()">
+                    <h3 class="portfolio-title">Галерея работ</h3>
+                    <p class="portfolio-description">Коллекция моих работ по дизайну, фото и видео редактированию</p>
+                    <div class="portfolio-tech">
+                        <span class="tech-tag">Photoshop</span>
+                        <span class="tech-tag">After Effects</span>
+                        <span class="tech-tag">Design</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Кнопка для включения режима редактирования -->
+            <div class="admin-toggle">
+                <button id="adminToggle" class="admin-btn">🔒 Режим редактирования</button>
             </div>
         </section>
+
+        <!-- Модальное окно галереи -->
+        <div id="galleryModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Галерея работ</h2>
+                    <button class="modal-close" onclick="closeGallery()">&times;</button>
+                </div>
+                
+                <!-- Форма загрузки (только в режиме редактирования) -->
+                <div class="gallery-upload-section" id="galleryUploadSection" style="display: none;">
+                    <form id="galleryUploadForm" class="gallery-upload-form">
+                        <div class="upload-area">
+                            <input type="file" id="galleryImage" name="image" accept="image/*" required>
+                            <label for="galleryImage" class="upload-label">
+                                <span class="upload-icon">📁</span>
+                                <span>Выберите изображение</span>
+                            </label>
+                        </div>
+                        <input type="text" id="galleryImageTitle" name="title" placeholder="Название работы (опционально)" class="gallery-input">
+                        <button type="submit" class="gallery-upload-btn">Загрузить</button>
+                    </form>
+                </div>
+
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Изображения будут загружаться динамически -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно просмотра изображения -->
+        <div id="imageViewerModal" class="modal image-viewer-modal">
+            <button class="modal-close viewer-close" onclick="closeImageViewer()">&times;</button>
+            <div class="viewer-nav prev" onclick="navigateGallery(-1)">&lt;</div>
+            <div class="viewer-nav next" onclick="navigateGallery(1)">&gt;</div>
+            <div class="viewer-counter" id="viewerCounter"></div>
+            <img id="viewerImage" src="" alt="">
+            <div id="viewerTitle" class="viewer-title"></div>
+        </div>
 
         <section id="payment">
             <div class="section-header">
@@ -874,6 +1410,10 @@
                 <div class="payment-item">
                     <img src="svg's/visa.svg" alt="Cards" class="payment-icon">
                     <div class="payment-name">UA Cards</div>
+                </div>
+                <div class="payment-item">
+                    <img src="svg's/funpay.svg" alt="FunPay" class="payment-icon">
+                    <div class="payment-name">FunPay</div>
                 </div>
                 <div class="payment-item">
                     <img src="svg's/usdt.svg" alt="USDT" class="payment-icon">
@@ -920,12 +1460,6 @@
                             <p>@imCEOmf</p>
                         </div>
                     </a>
-                    <a href="mailto:tupodupom@gmail.com" class="contact-item">
-                        <img src="svg's/gmail.svg?v=5" alt="Email" class="contact-icon">
-                        <div class="contact-info">
-                            <p>tupodupom@gmail.com</p>
-                        </div>
-                    </a>
                 </div>
             </div>
         </section>
@@ -937,6 +1471,428 @@
 
     <script>
         console.log('=== PORTFOLIO SCRIPT LOADED ===');
+        
+        const API_URL = 'http://localhost:5000/api';
+        let isAdminMode = false;
+        let currentGalleryImages = [];
+        let currentImageIndex = 0;
+
+        // Секретная комбинация для доступа к режиму редактирования (Ctrl+Shift+E)
+        let keySequence = [];
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+                const adminToggle = document.getElementById('adminToggle');
+                if (adminToggle) {
+                    adminToggle.parentElement.classList.toggle('visible');
+                    if (adminToggle.parentElement.classList.contains('visible')) {
+                        console.log('🔓 Режим редактирования разблокирован');
+                    }
+                }
+            }
+        });
+
+        // Открытие/закрытие галереи
+        function openGallery() {
+            document.getElementById('galleryModal').classList.add('active');
+            loadGallery();
+        }
+
+        function closeGallery() {
+            document.getElementById('galleryModal').classList.remove('active');
+        }
+
+        // Открытие/закрытие просмотра изображения
+        function openImageViewer(imageSrc, title, index, sourceElement) {
+            currentImageIndex = index;
+            
+            const modal = document.getElementById('imageViewerModal');
+            const img = document.getElementById('viewerImage');
+            
+            // Получаем позицию исходного изображения
+            if (sourceElement) {
+                const rect = sourceElement.getBoundingClientRect();
+                const scaleX = rect.width / window.innerWidth;
+                const scaleY = rect.height / window.innerHeight;
+                const translateX = rect.left + rect.width / 2 - window.innerWidth / 2;
+                const translateY = rect.top + rect.height / 2 - window.innerHeight / 2;
+                
+                // Устанавливаем начальную позицию
+                img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${Math.min(scaleX, scaleY)})`;
+                img.style.opacity = '0';
+            }
+            
+            modal.classList.add('active');
+            
+            // Небольшая задержка для применения начальных стилей
+            setTimeout(() => {
+                updateViewerImage();
+                // Анимация расширения
+                img.style.transform = 'translate(0, 0) scale(1)';
+                img.style.opacity = '1';
+            }, 10);
+        }
+
+        function updateViewerImage() {
+            if (currentGalleryImages.length === 0) return;
+            
+            const image = currentGalleryImages[currentImageIndex];
+            const modal = document.getElementById('imageViewerModal');
+            const img = document.getElementById('viewerImage');
+            const titleEl = document.getElementById('viewerTitle');
+            const counter = document.getElementById('viewerCounter');
+            
+            const imgSrc = `${API_URL.replace('/api', '')}/uploads/${image.filename}`;
+            
+            img.src = imgSrc;
+            titleEl.textContent = image.title || '';
+            titleEl.style.display = image.title ? 'block' : 'none';
+            counter.textContent = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+        }
+
+        function closeImageViewer() {
+            const modal = document.getElementById('imageViewerModal');
+            const img = document.getElementById('viewerImage');
+            
+            // Анимация закрытия
+            img.style.transform = 'scale(0.8)';
+            img.style.opacity = '0';
+            
+            setTimeout(() => {
+                modal.classList.remove('active');
+                img.style.transform = '';
+            }, 300);
+        }
+
+        // Навигация по галерее с анимацией
+        let isNavigating = false;
+        
+        function navigateGallery(direction) {
+            if (isNavigating) return;
+            isNavigating = true;
+            
+            const img = document.getElementById('viewerImage');
+            
+            // Анимация выхода
+            if (direction > 0) {
+                img.classList.add('swipe-left');
+            } else {
+                img.classList.add('swipe-right');
+            }
+            
+            setTimeout(() => {
+                // Обновляем индекс
+                currentImageIndex += direction;
+                
+                if (currentImageIndex < 0) {
+                    currentImageIndex = currentGalleryImages.length - 1;
+                } else if (currentImageIndex >= currentGalleryImages.length) {
+                    currentImageIndex = 0;
+                }
+                
+                // Убираем классы анимации
+                img.classList.remove('swipe-left', 'swipe-right');
+                
+                // Обновляем изображение
+                updateViewerImage();
+                
+                // Анимация входа
+                if (direction > 0) {
+                    img.classList.add('swipe-in-left');
+                } else {
+                    img.classList.add('swipe-in-right');
+                }
+                
+                setTimeout(() => {
+                    img.classList.remove('swipe-in-left', 'swipe-in-right');
+                    isNavigating = false;
+                }, 300);
+            }, 300);
+        }
+
+        // Клавиши для навигации
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('imageViewerModal');
+            if (!modal.classList.contains('active')) return;
+            
+            if (e.key === 'ArrowLeft') {
+                navigateGallery(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigateGallery(1);
+            } else if (e.key === 'Escape') {
+                closeImageViewer();
+            }
+        });
+
+        // Свайпы для мобильных
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('imageViewerModal')?.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('imageViewerModal')?.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Свайп влево - следующее изображение
+                    navigateGallery(1);
+                } else {
+                    // Свайп вправо - предыдущее изображение
+                    navigateGallery(-1);
+                }
+            }
+        }
+
+        // Загрузка галереи
+        async function loadGallery() {
+            try {
+                const response = await fetch(`${API_URL}/gallery`);
+                const images = await response.json();
+                
+                currentGalleryImages = images;
+                
+                const galleryGrid = document.getElementById('galleryGrid');
+                
+                if (images.length === 0) {
+                    galleryGrid.innerHTML = `
+                        <div class="gallery-empty">
+                            <div class="gallery-empty-icon">🖼️</div>
+                            <p>Галерея пока пуста</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                galleryGrid.innerHTML = '';
+                
+                images.forEach((image, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    
+                    const imgSrc = `${API_URL.replace('/api', '')}/uploads/${image.filename}`;
+                    
+                    item.innerHTML = `
+                        <img src="${imgSrc}" alt="${image.title || 'Gallery image'}" class="gallery-thumbnail">
+                        ${image.title ? `
+                            <div class="gallery-item-overlay">
+                                <div class="gallery-item-title">${image.title}</div>
+                            </div>
+                        ` : ''}
+                        ${isAdminMode ? `<button class="gallery-delete-btn" onclick="deleteGalleryImage(${image.id}, event)">🗑️</button>` : ''}
+                    `;
+                    
+                    const thumbnail = item.querySelector('.gallery-thumbnail');
+                    thumbnail.addEventListener('click', () => {
+                        openImageViewer(imgSrc, image.title, index, thumbnail);
+                    });
+                    
+                    galleryGrid.appendChild(item);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки галереи:', error);
+                document.getElementById('galleryGrid').innerHTML = `
+                    <div class="gallery-empty">
+                        <div class="gallery-empty-icon">⚠️</div>
+                        <p>Ошибка загрузки галереи. Убедитесь, что сервер запущен.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Удаление изображения из галереи
+        async function deleteGalleryImage(id, event) {
+            event.stopPropagation();
+            
+            if (!confirm('Удалить это изображение?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/gallery/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadGallery();
+                }
+            } catch (error) {
+                console.error('Ошибка удаления:', error);
+                alert('Ошибка удаления изображения');
+            }
+        }
+
+        // Отправка формы загрузки
+        document.getElementById('galleryUploadForm')?.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch(`${API_URL}/gallery/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Изображение успешно загружено!');
+                    this.reset();
+                    loadGallery();
+                } else {
+                    alert('Ошибка: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                alert('Ошибка загрузки изображения');
+            }
+        });
+
+        // Переключение режима редактирования
+        document.getElementById('adminToggle')?.addEventListener('click', function() {
+            isAdminMode = !isAdminMode;
+            const uploadSection = document.getElementById('galleryUploadSection');
+            
+            if (isAdminMode) {
+                this.textContent = '🔓 Выйти из режима редактирования';
+                this.classList.add('active');
+                if (uploadSection) uploadSection.style.display = 'block';
+            } else {
+                this.textContent = '🔒 Режим редактирования';
+                this.classList.remove('active');
+                if (uploadSection) uploadSection.style.display = 'none';
+            }
+            
+            // Перезагружаем галерею если она открыта
+            if (document.getElementById('galleryModal').classList.contains('active')) {
+                loadGallery();
+            }
+        });
+
+        // Закрытие модального окна по клику вне контента
+        document.getElementById('galleryModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGallery();
+            }
+        });
+
+        // Закрытие просмотра изображения по клику на фон
+        document.getElementById('imageViewerModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageViewer();
+            }
+        });
+        
+        // Плавная прокрутка
+        function smoothScrollTo(target, duration = 1000) {
+            // На мобильных используем нативный скролл
+            if (window.innerWidth <= 768) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+            
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - 80;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        // Инициализация после загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            // Скролл индикатор
+            const scrollIndicatorEl = document.querySelector('.scroll-indicator');
+            if (scrollIndicatorEl) {
+                scrollIndicatorEl.addEventListener('click', () => {
+                    const aboutSection = document.querySelector('#about');
+                    if (aboutSection) {
+                        smoothScrollTo(aboutSection, 1200);
+                    }
+                });
+            }
+
+            // Мобильное меню
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+                });
+
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.textContent = '☰';
+                    });
+                });
+            }
+
+            // Плавная прокрутка по якорям
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href === '#' || href === '#hero') {
+                        e.preventDefault();
+                        if (href === '#hero') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    
+                    if (target) {
+                        smoothScrollTo(target, 1000);
+                    }
+                });
+            });
+
+            // Активная ссылка в навигации
+            const sections = document.querySelectorAll('section');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').slice(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
         
         function smoothScrollTo(target, duration = 1000) {
             console.log('smoothScrollTo called for:', target);
