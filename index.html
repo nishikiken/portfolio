@@ -1474,13 +1474,13 @@
             document.getElementById('galleryModal').classList.add('active');
             loadGallery();
             // Обновляем URL
-            history.pushState({ gallery: true }, '', '/gallery');
+            history.pushState({ gallery: true }, '', '/portfolio/gallery');
         }
 
         function closeGallery() {
             document.getElementById('galleryModal').classList.remove('active');
             // Возвращаем URL к секции портфолио
-            history.pushState(null, '', '/portfolio');
+            history.pushState(null, '', '/portfolio/portfolio');
         }
 
         // Открытие/закрытие просмотра изображения
@@ -1523,7 +1523,7 @@
             const titleEl = document.getElementById('viewerTitle');
             const counter = document.getElementById('viewerCounter');
             
-            const imgSrc = `./uploads/${image.filename}`;
+            const imgSrc = `/portfolio/uploads/${image.filename}`;
             
             img.src = imgSrc;
             titleEl.textContent = image.title || '';
@@ -1636,7 +1636,7 @@
         // Загрузка галереи (статическая версия - без сервера)
         async function loadGallery() {
             try {
-                const response = await fetch('./gallery.json');
+                const response = await fetch('/portfolio/gallery.json');
                 const images = await response.json();
                 
                 currentGalleryImages = images;
@@ -1662,7 +1662,7 @@
                     const item = document.createElement('div');
                     item.className = 'gallery-item';
                     
-                    const imgSrc = `./uploads/${image.filename}`;
+                    const imgSrc = `/portfolio/uploads/${image.filename}`;
                     
                     item.innerHTML = `
                         <img src="${imgSrc}" alt="${image.title || 'Gallery image'}" class="gallery-thumbnail">
@@ -1780,7 +1780,7 @@
                         e.preventDefault();
                         if (href === '#hero') {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
-                            history.pushState(null, '', '/');
+                            history.pushState(null, '', '/portfolio/');
                         }
                         return;
                     }
@@ -1792,7 +1792,7 @@
                         smoothScrollTo(target, 1000);
                         // Обновляем URL без перезагрузки страницы
                         const sectionName = href.slice(1); // убираем #
-                        history.pushState(null, '', `/${sectionName}`);
+                        history.pushState(null, '', `/portfolio/${sectionName}`);
                     }
                 });
             });
@@ -1821,8 +1821,8 @@
                 });
                 
                 // Обновляем URL при скролле
-                if (current && window.location.pathname !== `/${current}`) {
-                    history.replaceState(null, '', current ? `/${current}` : '/');
+                if (current && window.location.pathname !== `/portfolio/${current}`) {
+                    history.replaceState(null, '', current ? `/portfolio/${current}` : '/portfolio/');
                 }
             });
             
@@ -1830,43 +1830,43 @@
             window.addEventListener('popstate', function() {
                 const path = window.location.pathname;
                 
-                // Закрываем галерею если она открыта и мы уходим с /gallery
-                if (path !== '/gallery') {
+                // Закрываем галерею если она открыта и мы уходим с /portfolio/gallery
+                if (path !== '/portfolio/gallery') {
                     const galleryModal = document.getElementById('galleryModal');
                     if (galleryModal && galleryModal.classList.contains('active')) {
                         galleryModal.classList.remove('active');
                     }
                 }
                 
-                // Открываем галерею если путь /gallery
-                if (path === '/gallery') {
+                // Открываем галерею если путь /portfolio/gallery
+                if (path === '/portfolio/gallery') {
                     openGallery();
                     return;
                 }
                 
-                const sectionId = path === '/' ? 'hero' : path.slice(1);
+                // Извлекаем секцию из пути /portfolio/section
+                const sectionId = path === '/portfolio/' || path === '/portfolio' ? 'hero' : path.replace('/portfolio/', '');
                 const target = document.getElementById(sectionId);
                 
                 if (target) {
                     isScrolling = true;
                     smoothScrollTo(target, 1000);
                     setTimeout(() => { isScrolling = false; }, 1100);
-                } else if (path === '/') {
+                } else if (path === '/portfolio/' || path === '/portfolio') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
             
             // Загрузка страницы с якорем в URL
-            if (window.location.pathname !== '/') {
-                const path = window.location.pathname;
-                
-                // Открываем галерею если прямая ссылка /gallery
-                if (path === '/gallery') {
+            const currentPath = window.location.pathname;
+            if (currentPath !== '/portfolio/' && currentPath !== '/portfolio') {
+                // Открываем галерею если прямая ссылка /portfolio/gallery
+                if (currentPath === '/portfolio/gallery') {
                     setTimeout(() => {
                         openGallery();
                     }, 100);
                 } else {
-                    const sectionId = path.slice(1);
+                    const sectionId = currentPath.replace('/portfolio/', '');
                     const target = document.getElementById(sectionId);
                     if (target) {
                         setTimeout(() => {
