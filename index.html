@@ -1473,10 +1473,14 @@
         function openGallery() {
             document.getElementById('galleryModal').classList.add('active');
             loadGallery();
+            // Обновляем URL
+            history.pushState({ gallery: true }, '', '/gallery');
         }
 
         function closeGallery() {
             document.getElementById('galleryModal').classList.remove('active');
+            // Возвращаем URL к секции портфолио
+            history.pushState(null, '', '/portfolio');
         }
 
         // Открытие/закрытие просмотра изображения
@@ -1767,7 +1771,7 @@
                 });
             }
 
-            // Плавная прокрутка по якорям
+            // Плавная прокрутка по якорям с обновлением URL
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
@@ -1776,6 +1780,7 @@
                         e.preventDefault();
                         if (href === '#hero') {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
+                            history.pushState(null, '', '/');
                         }
                         return;
                     }
@@ -1785,13 +1790,20 @@
                     
                     if (target) {
                         smoothScrollTo(target, 1000);
+                        // Обновляем URL без перезагрузки страницы
+                        const sectionName = href.slice(1); // убираем #
+                        history.pushState(null, '', `/${sectionName}`);
                     }
                 });
             });
 
-            // Активная ссылка в навигации
+            // Активная ссылка в навигации + обновление URL при скролле
             const sections = document.querySelectorAll('section');
+            let isScrolling = false;
+            
             window.addEventListener('scroll', () => {
+                if (isScrolling) return;
+                
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
@@ -1807,7 +1819,62 @@
                         link.classList.add('active');
                     }
                 });
+                
+                // Обновляем URL при скролле
+                if (current && window.location.pathname !== `/${current}`) {
+                    history.replaceState(null, '', current ? `/${current}` : '/');
+                }
             });
+            
+            // Обработка кнопок "Назад/Вперед" браузера
+            window.addEventListener('popstate', function() {
+                const path = window.location.pathname;
+                
+                // Закрываем галерею если она открыта и мы уходим с /gallery
+                if (path !== '/gallery') {
+                    const galleryModal = document.getElementById('galleryModal');
+                    if (galleryModal && galleryModal.classList.contains('active')) {
+                        galleryModal.classList.remove('active');
+                    }
+                }
+                
+                // Открываем галерею если путь /gallery
+                if (path === '/gallery') {
+                    openGallery();
+                    return;
+                }
+                
+                const sectionId = path === '/' ? 'hero' : path.slice(1);
+                const target = document.getElementById(sectionId);
+                
+                if (target) {
+                    isScrolling = true;
+                    smoothScrollTo(target, 1000);
+                    setTimeout(() => { isScrolling = false; }, 1100);
+                } else if (path === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+            
+            // Загрузка страницы с якорем в URL
+            if (window.location.pathname !== '/') {
+                const path = window.location.pathname;
+                
+                // Открываем галерею если прямая ссылка /gallery
+                if (path === '/gallery') {
+                    setTimeout(() => {
+                        openGallery();
+                    }, 100);
+                } else {
+                    const sectionId = path.slice(1);
+                    const target = document.getElementById(sectionId);
+                    if (target) {
+                        setTimeout(() => {
+                            smoothScrollTo(target, 1000);
+                        }, 100);
+                    }
+                }
+            }
         });
         
         function smoothScrollTo(target, duration = 1000) {
