@@ -1351,11 +1351,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Кнопка для включения режима редактирования -->
-            <div class="admin-toggle">
-                <button id="adminToggle" class="admin-btn">🔒 Режим редактирования</button>
-            </div>
         </section>
 
         <!-- Модальное окно галереи -->
@@ -1365,24 +1360,9 @@
                     <h2 class="modal-title">Галерея работ</h2>
                     <button class="modal-close" onclick="closeGallery()">&times;</button>
                 </div>
-                
-                <!-- Форма загрузки (только в режиме редактирования) -->
-                <div class="gallery-upload-section" id="galleryUploadSection" style="display: none;">
-                    <form id="galleryUploadForm" class="gallery-upload-form">
-                        <div class="upload-area">
-                            <input type="file" id="galleryImage" name="image" accept="image/*" required>
-                            <label for="galleryImage" class="upload-label">
-                                <span class="upload-icon">📁</span>
-                                <span>Выберите изображение</span>
-                            </label>
-                        </div>
-                        <input type="text" id="galleryImageTitle" name="title" placeholder="Название работы (опционально)" class="gallery-input">
-                        <button type="submit" class="gallery-upload-btn">Загрузить</button>
-                    </form>
-                </div>
 
                 <div class="gallery-grid" id="galleryGrid">
-                    <!-- Изображения будут загружаться динамически -->
+                    <!-- Изображения загружаются из gallery.json -->
                 </div>
             </div>
         </div>
@@ -1472,8 +1452,6 @@
     <script>
         console.log('=== PORTFOLIO SCRIPT LOADED ===');
         
-        const API_URL = 'http://localhost:5000/api';
-        let isAdminMode = false;
         let currentGalleryImages = [];
         let currentImageIndex = 0;
 
@@ -1651,10 +1629,10 @@
             }
         }
 
-        // Загрузка галереи
+        // Загрузка галереи (статическая версия - без сервера)
         async function loadGallery() {
             try {
-                const response = await fetch(`${API_URL}/gallery`);
+                const response = await fetch('./gallery.json');
                 const images = await response.json();
                 
                 currentGalleryImages = images;
@@ -1666,6 +1644,9 @@
                         <div class="gallery-empty">
                             <div class="gallery-empty-icon">🖼️</div>
                             <p>Галерея пока пуста</p>
+                            <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-muted);">
+                                Добавьте изображения в папку uploads/ и обновите gallery.json
+                            </p>
                         </div>
                     `;
                     return;
@@ -1677,7 +1658,7 @@
                     const item = document.createElement('div');
                     item.className = 'gallery-item';
                     
-                    const imgSrc = `${API_URL.replace('/api', '')}/uploads/${image.filename}`;
+                    const imgSrc = `./uploads/${image.filename}`;
                     
                     item.innerHTML = `
                         <img src="${imgSrc}" alt="${image.title || 'Gallery image'}" class="gallery-thumbnail">
@@ -1686,7 +1667,6 @@
                                 <div class="gallery-item-title">${image.title}</div>
                             </div>
                         ` : ''}
-                        ${isAdminMode ? `<button class="gallery-delete-btn" onclick="deleteGalleryImage(${image.id}, event)">🗑️</button>` : ''}
                     `;
                     
                     const thumbnail = item.querySelector('.gallery-thumbnail');
@@ -1700,81 +1680,17 @@
                 console.error('Ошибка загрузки галереи:', error);
                 document.getElementById('galleryGrid').innerHTML = `
                     <div class="gallery-empty">
-                        <div class="gallery-empty-icon">⚠️</div>
-                        <p>Ошибка загрузки галереи. Убедитесь, что сервер запущен.</p>
+                        <div class="gallery-empty-icon">🖼️</div>
+                        <p>Галерея пока пуста</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-muted);">
+                            Добавьте изображения в папку uploads/ и обновите gallery.json
+                        </p>
                     </div>
                 `;
             }
         }
 
-        // Удаление изображения из галереи
-        async function deleteGalleryImage(id, event) {
-            event.stopPropagation();
-            
-            if (!confirm('Удалить это изображение?')) return;
-            
-            try {
-                const response = await fetch(`${API_URL}/gallery/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.ok) {
-                    loadGallery();
-                }
-            } catch (error) {
-                console.error('Ошибка удаления:', error);
-                alert('Ошибка удаления изображения');
-            }
-        }
-
-        // Отправка формы загрузки
-        document.getElementById('galleryUploadForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            try {
-                const response = await fetch(`${API_URL}/gallery/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert('Изображение успешно загружено!');
-                    this.reset();
-                    loadGallery();
-                } else {
-                    alert('Ошибка: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                alert('Ошибка загрузки изображения');
-            }
-        });
-
-        // Переключение режима редактирования
-        document.getElementById('adminToggle')?.addEventListener('click', function() {
-            isAdminMode = !isAdminMode;
-            const uploadSection = document.getElementById('galleryUploadSection');
-            
-            if (isAdminMode) {
-                this.textContent = '🔓 Выйти из режима редактирования';
-                this.classList.add('active');
-                if (uploadSection) uploadSection.style.display = 'block';
-            } else {
-                this.textContent = '🔒 Режим редактирования';
-                this.classList.remove('active');
-                if (uploadSection) uploadSection.style.display = 'none';
-            }
-            
-            // Перезагружаем галерею если она открыта
-            if (document.getElementById('galleryModal').classList.contains('active')) {
-                loadGallery();
-            }
-        });
-
+        
         // Закрытие модального окна по клику вне контента
         document.getElementById('galleryModal')?.addEventListener('click', function(e) {
             if (e.target === this) {
