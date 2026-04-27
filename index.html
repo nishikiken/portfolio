@@ -1519,7 +1519,7 @@
             const titleEl = document.getElementById('viewerTitle');
             const counter = document.getElementById('viewerCounter');
             
-            const imgSrc = `${API_URL.replace('/api', '')}/uploads/${image.filename}`;
+            const imgSrc = `./uploads/${image.filename}`;
             
             img.src = imgSrc;
             titleEl.textContent = image.title || '';
