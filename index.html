@@ -1473,14 +1473,14 @@
         function openGallery() {
             document.getElementById('galleryModal').classList.add('active');
             loadGallery();
-            // Обновляем URL
-            history.pushState({ gallery: true }, '', '/portfolio/gallery');
+            // Обновляем hash
+            window.location.hash = 'gallery';
         }
 
         function closeGallery() {
             document.getElementById('galleryModal').classList.remove('active');
-            // Возвращаем URL к секции портфолио
-            history.pushState(null, '', '/portfolio/portfolio');
+            // Возвращаем hash к секции портфолио
+            window.location.hash = 'portfolio';
         }
 
         // Открытие/закрытие просмотра изображения
@@ -1523,7 +1523,7 @@
             const titleEl = document.getElementById('viewerTitle');
             const counter = document.getElementById('viewerCounter');
             
-            const imgSrc = `/portfolio/uploads/${image.filename}`;
+            const imgSrc = `./uploads/${image.filename}`;
             
             img.src = imgSrc;
             titleEl.textContent = image.title || '';
@@ -1636,7 +1636,7 @@
         // Загрузка галереи (статическая версия - без сервера)
         async function loadGallery() {
             try {
-                const response = await fetch('/portfolio/gallery.json');
+                const response = await fetch('./gallery.json');
                 const images = await response.json();
                 
                 currentGalleryImages = images;
@@ -1662,7 +1662,7 @@
                     const item = document.createElement('div');
                     item.className = 'gallery-item';
                     
-                    const imgSrc = `/portfolio/uploads/${image.filename}`;
+                    const imgSrc = `./uploads/${image.filename}`;
                     
                     item.innerHTML = `
                         <img src="${imgSrc}" alt="${image.title || 'Gallery image'}" class="gallery-thumbnail">
@@ -1771,7 +1771,7 @@
                 });
             }
 
-            // Плавная прокрутка по якорям с обновлением URL
+            // Плавная прокрутка по якорям с обновлением URL (hash-роутинг)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
@@ -1780,7 +1780,7 @@
                         e.preventDefault();
                         if (href === '#hero') {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
-                            history.pushState(null, '', '/portfolio/');
+                            window.location.hash = '';
                         }
                         return;
                     }
@@ -1790,19 +1790,19 @@
                     
                     if (target) {
                         smoothScrollTo(target, 1000);
-                        // Обновляем URL без перезагрузки страницы
-                        const sectionName = href.slice(1); // убираем #
-                        history.pushState(null, '', `/portfolio/${sectionName}`);
+                        // Обновляем hash в URL
+                        window.location.hash = href;
                     }
                 });
             });
 
-            // Активная ссылка в навигации + обновление URL при скролле
+            // Активная ссылка в навигации + обновление hash при скролле
             const sections = document.querySelectorAll('section');
             let isScrolling = false;
+            let isHashChange = false;
             
             window.addEventListener('scroll', () => {
-                if (isScrolling) return;
+                if (isScrolling || isHashChange) return;
                 
                 let current = '';
                 sections.forEach(section => {
@@ -1820,54 +1820,58 @@
                     }
                 });
                 
-                // Обновляем URL при скролле
-                if (current && window.location.pathname !== `/portfolio/${current}`) {
-                    history.replaceState(null, '', current ? `/portfolio/${current}` : '/portfolio/');
+                // Обновляем hash при скролле
+                if (current && window.location.hash !== `#${current}`) {
+                    history.replaceState(null, '', current ? `#${current}` : '');
                 }
             });
             
-            // Обработка кнопок "Назад/Вперед" браузера
-            window.addEventListener('popstate', function() {
-                const path = window.location.pathname;
+            // Обработка изменения hash (кнопки "Назад/Вперед" и прямые ссылки)
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash;
                 
-                // Закрываем галерею если она открыта и мы уходим с /portfolio/gallery
-                if (path !== '/portfolio/gallery') {
+                // Закрываем галерею если она открыта и hash не #gallery
+                if (hash !== '#gallery') {
                     const galleryModal = document.getElementById('galleryModal');
                     if (galleryModal && galleryModal.classList.contains('active')) {
                         galleryModal.classList.remove('active');
                     }
                 }
                 
-                // Открываем галерею если путь /portfolio/gallery
-                if (path === '/portfolio/gallery') {
+                // Открываем галерею если hash #gallery
+                if (hash === '#gallery') {
                     openGallery();
                     return;
                 }
                 
-                // Извлекаем секцию из пути /portfolio/section
-                const sectionId = path === '/portfolio/' || path === '/portfolio' ? 'hero' : path.replace('/portfolio/', '');
-                const target = document.getElementById(sectionId);
-                
-                if (target) {
-                    isScrolling = true;
-                    smoothScrollTo(target, 1000);
-                    setTimeout(() => { isScrolling = false; }, 1100);
-                } else if (path === '/portfolio/' || path === '/portfolio') {
+                // Скроллим к секции
+                if (hash) {
+                    const target = document.querySelector(hash);
+                    if (target) {
+                        isHashChange = true;
+                        isScrolling = true;
+                        smoothScrollTo(target, 1000);
+                        setTimeout(() => { 
+                            isScrolling = false;
+                            isHashChange = false;
+                        }, 1100);
+                    }
+                } else {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
             
-            // Загрузка страницы с якорем в URL
-            const currentPath = window.location.pathname;
-            if (currentPath !== '/portfolio/' && currentPath !== '/portfolio') {
-                // Открываем галерею если прямая ссылка /portfolio/gallery
-                if (currentPath === '/portfolio/gallery') {
+            // Загрузка страницы с hash в URL
+            if (window.location.hash) {
+                const hash = window.location.hash;
+                
+                // Открываем галерею если прямая ссылка #gallery
+                if (hash === '#gallery') {
                     setTimeout(() => {
                         openGallery();
                     }, 100);
                 } else {
-                    const sectionId = currentPath.replace('/portfolio/', '');
-                    const target = document.getElementById(sectionId);
+                    const target = document.querySelector(hash);
                     if (target) {
                         setTimeout(() => {
                             smoothScrollTo(target, 1000);
