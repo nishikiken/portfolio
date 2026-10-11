@@ -227,11 +227,6 @@
             width: 100%;
         }
 
-        body.site-flying .ambient-glow {
-            opacity: 0.6;
-            transform: scale(1.15);
-        }
-
         /* Hero Section */
         .hero {
             min-height: 88vh;
@@ -1531,28 +1526,44 @@
                 min-height: 480px;
                 transform: none !important;
                 flex-direction: column;
-                padding-top: 1.5rem;
-                margin: 1.5rem auto 1.2rem;
+                padding-top: 5.2rem;
+                margin: 1.2rem auto 1.2rem;
                 position: relative;
             }
 
             .apple-wallet-center {
                 position: relative;
                 transform: none !important;
-                margin-bottom: 3.8rem;
+                margin-bottom: 2.2rem;
                 z-index: 10;
             }
 
             .payment-callout-container {
                 display: block !important;
                 position: absolute;
-                left: calc(50% - 170px);
-                top: 80px;
-                transform: scale(0.62);
+                left: calc(50% - 140px);
+                top: -10px;
+                transform: scale(0.68);
                 transform-origin: top left;
                 z-index: 15;
                 opacity: 1 !important;
                 pointer-events: none;
+            }
+
+            .payment-callout-text {
+                transform: rotate(-6deg) translateY(12px) translateX(0px);
+                font-size: 2.45rem;
+                color: #ffffff;
+                text-shadow: 0 0 16px rgba(255, 255, 255, 0.6), 0 0 32px rgba(41, 151, 255, 0.7);
+            }
+
+            .payment-animated-arrow-svg {
+                position: absolute;
+                left: 50%;
+                top: 25px;
+                transform: scaleY(-1) rotate(16deg) translateX(-20%);
+                width: 200px;
+                height: 135px;
             }
 
             .payment-deck {
@@ -1599,8 +1610,8 @@
 
         @media (max-width: 380px) {
             .payment-callout-container {
-                left: 10px;
-                transform: scale(0.55);
+                left: calc(50% - 128px);
+                transform: scale(0.60);
             }
         }
 
@@ -2937,28 +2948,34 @@
             const target = document.getElementById('portfolio');
             if (!target) return;
 
+            // Header offset of 78px stops higher so "Способы оплаты" at bottom of screen is 100% hidden
+            const headerOffset = 78;
             const startY = window.pageYOffset || document.documentElement.scrollTop;
-            const targetY = target.getBoundingClientRect().top + startY - 20;
+            const targetY = Math.max(0, target.getBoundingClientRect().top + startY - headerOffset);
             const distance = targetY - startY;
             if (Math.abs(distance) < 5) return;
 
-            document.body.classList.add('site-flying');
+            // Mobile / Touch devices: native hardware-accelerated 120 FPS compositor scroll
+            if (window.matchMedia('(hover: none)').matches || window.innerWidth <= 768) {
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
+                return;
+            }
 
-            const duration = Math.min(800, Math.max(520, Math.abs(distance) * 0.42));
+            // Desktop: luxurious, calm and cinematic smooth flight (~1150ms)
+            const duration = 1150;
             let startTime = null;
             let cancelled = false;
 
             const cancelFlight = () => {
                 cancelled = true;
-                document.body.classList.remove('site-flying');
                 window.removeEventListener('wheel', cancelFlight);
                 window.removeEventListener('touchmove', cancelFlight);
             };
             window.addEventListener('wheel', cancelFlight, { passive: true, once: true });
             window.addEventListener('touchmove', cancelFlight, { passive: true, once: true });
 
-            function easeOutCubic(t) {
-                return 1 - Math.pow(1 - t, 3);
+            function easeInOutCubic(t) {
+                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
             }
 
             function step(timestamp) {
@@ -2966,14 +2983,13 @@
                 if (!startTime) startTime = timestamp;
                 const elapsed = timestamp - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const ease = easeOutCubic(progress);
+                const ease = easeInOutCubic(progress);
 
                 window.scrollTo(0, startY + distance * ease);
 
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
-                    document.body.classList.remove('site-flying');
                     window.removeEventListener('wheel', cancelFlight);
                     window.removeEventListener('touchmove', cancelFlight);
                 }
@@ -3556,38 +3572,43 @@
             const sections = document.querySelectorAll('section');
             const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
 
+            let scrollTicking = false;
             window.addEventListener('scroll', () => {
-                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                if (progressBar) progressBar.style.width = scrolled + '%';
+                if (!scrollTicking) {
+                    window.requestAnimationFrame(() => {
+                        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+                        if (progressBar) progressBar.style.width = scrolled + '%';
 
-                if (header) {
-                    if (winScroll > 30) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
+                        if (header) {
+                            if (winScroll > 30) {
+                                header.classList.add('scrolled');
+                            } else {
+                                header.classList.remove('scrolled');
+                            }
+                        }
+
+                        let current = '';
+                        sections.forEach(sec => {
+                            const top = sec.offsetTop;
+                            if (winScroll >= top - 180) {
+                                current = sec.getAttribute('id');
+                            }
+                        });
+
+                        navAnchors.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${current}`) {
+                                link.classList.add('active');
+                            }
+                        });
+
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
                 }
-
-                let current = '';
-                sections.forEach(sec => {
-                    const top = sec.offsetTop;
-                    if (winScroll >= top - 180) {
-                        current = sec.getAttribute('id');
-                    }
-                });
-
-                navAnchors.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-
-                // Payment stage interaction: hover/click card opens chips
-                // (no automatic scroll forcing so chips stay tucked behind card by default)
-            });
+            }, { passive: true });
 
             document.addEventListener('keydown', (e) => {
                 const imgModal = document.getElementById('imageViewerModal');
