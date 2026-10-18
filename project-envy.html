@@ -167,8 +167,37 @@
         .app-action-row {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.25rem;
             flex-wrap: wrap;
+        }
+
+        .update-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #8e8e93;
+            font-size: 0.85rem;
+            font-weight: 400;
+            user-select: none;
+            letter-spacing: -0.01em;
+        }
+
+        .update-date-badge svg {
+            opacity: 0.65;
+        }
+
+        .badge-new {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 1px 6px;
+            border-radius: 5px;
+            background: rgba(10, 132, 255, 0.16);
+            color: #2997ff;
+            margin-left: 5px;
+            vertical-align: 1px;
+            letter-spacing: 0.02em;
         }
 
         .btn-apple-get {
@@ -419,6 +448,13 @@
                             <span>Скачать macOS notch (Windows)</span>
                             <span style="font-size: 0.82rem; opacity: 0.85; margin-left: 0.2rem;">• 82 MB .exe</span>
                         </a>
+                        <span class="update-date-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Обновлено: 19 октября 2026
+                        </span>
                     </div>
                     <div class="tech-pill-row">
                         <span class="tech-pill">C#</span>
@@ -454,6 +490,7 @@
             <ul>
                 <li><strong>Музыкальный плеер</strong> — управление воспроизведением, паузой, переключением и перемоткой треков прямо из шторки.</li>
                 <li><strong>Drop & Shelf</strong> — временная полка для файлов, к которым нужен быстрый доступ без поиска по папкам.</li>
+                <li><strong>Переводчик</strong> <span class="badge-new">new!</span> — мгновенный перевод текста прямо из шторки, захват и распознавание выделенной области на экране (OCR), а также удобный двусторонний переводчик в настройках с автоопределением языка.</li>
                 <li><strong>Кастомизация</strong> — настройка цветов логотипа и интерфейса, а также интенсивности свечения обложки альбома.</li>
                 <li><strong>Тексты песен</strong> — отображение текста прямо в шторке. Функция находится в бета-версии и может работать нестабильно: возможны задержки и рассинхронизация. Из-за этого её использование пока не рекомендуется.</li>
                 <li><strong>Встроенный мини-браузер</strong> — доступ к SoundCloud и YouTube для прослушивания музыки прямо внутри приложения. Для SoundCloud предусмотрен обход ограничения, из-за которого может прерываться запись через NVIDIA ShadowPlay.</li>
@@ -465,7 +502,7 @@
             </p>
         </div>
 
-        <div style="display: flex; justify-content: center; margin-top: 2.2rem; margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 2.2rem; margin-bottom: 1rem;">
             <a href="macOS notch.exe" download="macOS notch.exe" class="btn-apple-get" style="padding: 0.9rem 2.4rem; font-size: 1.05rem;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -474,6 +511,13 @@
                 </svg>
                 <span>Скачать macOS notch (.exe • 82 MB)</span>
             </a>
+            <span class="update-date-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Обновлено: 19 октября 2026
+            </span>
         </div>
     </main>
 

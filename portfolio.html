@@ -1959,8 +1959,37 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 1rem;
+            gap: 1.25rem;
             flex-wrap: wrap;
+        }
+
+        .update-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #8e8e93;
+            font-size: 0.85rem;
+            font-weight: 400;
+            user-select: none;
+            letter-spacing: -0.01em;
+        }
+
+        .update-date-badge svg {
+            opacity: 0.65;
+        }
+
+        .badge-new {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 1px 6px;
+            border-radius: 5px;
+            background: rgba(10, 132, 255, 0.16);
+            color: #2997ff;
+            margin-left: 5px;
+            vertical-align: 1px;
+            letter-spacing: 0.02em;
         }
 
         /* CATALOG MODAL (BORDER-FREE) */
@@ -2865,6 +2894,7 @@
                     <ul>
                         <li><strong>Музыкальный плеер</strong> — управление воспроизведением, паузой, переключением и перемоткой треков прямо из шторки.</li>
                         <li><strong>Drop & Shelf</strong> — временная полка для файлов, к которым нужен быстрый доступ без поиска по папкам.</li>
+                        <li><strong>Переводчик</strong> <span class="badge-new">new!</span> — мгновенный перевод текста прямо из шторки, захват и распознавание выделенной области на экране (OCR), а также удобный двусторонний переводчик в настройках с автоопределением языка.</li>
                         <li><strong>Кастомизация</strong> — настройка цветов логотипа и интерфейса, а также интенсивности свечения обложки альбома.</li>
                         <li><strong>Тексты песен</strong> — отображение текста прямо в шторке. Функция находится в бета-версии и может работать нестабильно: возможны задержки и рассинхронизация. Из-за этого её использование пока не рекомендуется.</li>
                         <li><strong>Встроенный мини-браузер</strong> — доступ к SoundCloud и YouTube для прослушивания музыки прямо внутри приложения. Для SoundCloud предусмотрен обход ограничения, из-за которого может прерываться запись через NVIDIA ShadowPlay.</li>
@@ -2885,6 +2915,13 @@
                         </svg>
                         <span>Скачать macOS notch (.exe • 82 MB)</span>
                     </a>
+                    <span class="update-date-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Обновлено: 19 октября 2026
+                    </span>
                 </div>
             </div>
         </div>
