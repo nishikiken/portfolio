@@ -1,5 +1,5 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "downloadUrl": "https://nishikiken.github.io/portfolio/macOS%20notch.exe",
-  "releaseNotes": "Нативные окна уведомлений в стиле macOS Sequoia, улучшенный интерфейс центра обновлений."
+  "releaseNotes": "Автоматическое уведомление об обновлении при запуске, мгновенный перезапуск и очистка дубликатов в имени файла."
 }
