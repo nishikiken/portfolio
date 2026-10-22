@@ -1,5 +1,5 @@
 {
-  "version": "1.0.4",
+  "version": "1.0.5",
   "downloadUrl": "https://nishikiken.github.io/portfolio/macOS%20notch.exe",
-  "releaseNotes": "Автоматическое обновление приложения, исправление авторизации в мини-браузере."
+  "releaseNotes": "Нативные окна уведомлений в стиле macOS Sequoia, улучшенный интерфейс центра обновлений."
 }
