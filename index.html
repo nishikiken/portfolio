@@ -2661,6 +2661,34 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Project 4: Finding Token -->
+                <div class="portfolio-card reveal" onclick="openProjectModal('findingtoken')">
+                    <div class="portfolio-card-top">
+                        <div class="portfolio-app-icon" style="width: 54px; height: 54px; border-radius: 14px; background: #161922; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <img src="uploads/finding_token_icon.png" alt="Finding Token" style="width: 36px; height: 36px; object-fit: contain;">
+                        </div>
+                        <div class="portfolio-app-meta">
+                            <h3 class="portfolio-title">Finding Token</h3>
+                            <div class="portfolio-subline">Fortnite Replay & Chest Tracker PRO</div>
+                        </div>
+                    </div>
+                    <p class="portfolio-description">
+                        Профессиональный трекер реплеев и внутриигровой HUD оверлей для Fortnite: автоматический подсчет сундуков, гринд заказов, реестр сокровищ и автообновление.
+                    </p>
+                    <div class="portfolio-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">PySide6</span>
+                        <span class="tech-tag">DirectX HUD</span>
+                        <span class="tech-tag">Vault AES</span>
+                    </div>
+                    <div class="portfolio-card-footer">
+                        <div class="btn-appstore-pill">
+                            <span>Подробнее & Скачать</span>
+                            <span>↗</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -2721,12 +2749,12 @@
                     </div>
 
                     <!-- 4. FunPay (Bottom right) -->
-                    <div class="pay-card pay-chip pay-chip-4 pay-card-funpay pay-chip-funpay" style="--rot: 10deg; --fly-x: 255px; --fly-y: 200px; --fly-rot: 8deg;">
+                    <a href="https://funpay.com/users/21146186/" target="_blank" rel="noopener noreferrer" class="pay-card pay-chip pay-chip-4 pay-card-funpay pay-chip-funpay" style="--rot: 10deg; --fly-x: 255px; --fly-y: 200px; --fly-rot: 8deg; text-decoration: none; color: inherit;">
                         <div class="pay-card-icon-box">
                             <img src="svg's/funpay.svg" alt="FunPay">
                         </div>
                         <span class="pay-card-name">FunPay</span>
-                    </div>
+                    </a>
 
                     <!-- 5. Банковские карты (Bottom center) -->
                     <div class="pay-card pay-chip pay-chip-5 pay-card-cards pay-chip-cards" style="--rot: -5deg; --fly-x: 0px; --fly-y: 235px; --fly-rot: -2deg;">
@@ -2788,6 +2816,10 @@
                     <a href="https://t.me/Noria000" target="_blank" rel="noopener noreferrer" class="contact-item">
                         <img src="svg's/telegram.svg?v=5" alt="Telegram" class="contact-icon">
                         <p class="contact-handle">Написать в ЛС</p>
+                    </a>
+                    <a href="https://funpay.com/users/21146186/" target="_blank" rel="noopener noreferrer" class="contact-item">
+                        <img src="svg's/funpay.svg" alt="FunPay" class="contact-icon">
+                        <p class="contact-handle">Профиль FunPay</p>
                     </a>
                 </div>
             </div>
@@ -2923,6 +2955,75 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                         Обновлено: 22 октября 2026 в 12:25
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP STORE CASE STUDY MODAL: FINDING TOKEN -->
+    <div id="modalProjectFindingToken" class="appstore-modal" onclick="closeProjectModalOnBackdrop(event, 'findingtoken')">
+        <div class="appstore-sheet">
+            <div class="appstore-sheet-header">
+                <div class="appstore-header-left">
+                    <div class="appstore-app-icon" style="width: 88px; height: 88px; padding: 12px; border-radius: 22px; background: #161922; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center;">
+                        <img src="uploads/finding_token_icon.png" alt="Finding Token" style="width: 64px; height: 64px; object-fit: contain;">
+                    </div>
+                    <div class="appstore-app-titles">
+                        <h3 class="appstore-app-name">Finding Token</h3>
+                        <div class="appstore-app-subtitle">Fortnite Replay & Chest Tracker PRO</div>
+                    </div>
+                </div>
+                <button class="appstore-close-btn" onclick="closeProjectModal('findingtoken')">×</button>
+            </div>
+            <div class="appstore-sheet-body">
+                <div class="appstore-section-label">Скриншоты приложения</div>
+                <div class="appstore-gallery-reel">
+                    <div class="appstore-screenshot-item wide-desktop">
+                        <img src="uploads/ft_screen_dashboard.png" alt="Главная / Обзор">
+                    </div>
+                    <div class="appstore-screenshot-item wide-desktop">
+                        <img src="uploads/ft_screen_analytics.png" alt="Аналитика и Отчёты">
+                    </div>
+                    <div class="appstore-screenshot-item wide-desktop">
+                        <img src="uploads/ft_screen_matches.png" alt="История матчей">
+                    </div>
+                    <div class="appstore-screenshot-item wide-desktop">
+                        <img src="uploads/ft_screen_orders.png" alt="Заказы и Гринд">
+                    </div>
+                </div>
+
+                <div class="appstore-section-label">Описание</div>
+                <div class="appstore-desc-box">
+                    <h4># Finding Token — Профессиональный трекер реплеев Fortnite</h4>
+                    <p>
+                        Finding Token — специализированное настольное приложение для игроков Fortnite, гриндеров и продавцов услуг. Приложение читает локальные .replay файлы Fortnite на лету, подсчитывая открытые контейнеры, тайминги, типы сундуков и найденные редкие сокровища.
+                    </p>
+                    <ul>
+                        <li><strong>In-Game HUD Оверлей</strong> — минималистичный плавающий виджет поверх игры без нагрузки на FPS, показывающий счетчик сундуков за текущую сессию и прогресс активного заказа.</li>
+                        <li><strong>Автоматический мониторинг</strong> — отслеживание появления новых реплеев без необходимости ручного сканирования.</li>
+                        <li><strong>Гринд & FunPay заказы</strong> — создание заказов на любое количество сундуков, привязка матчей, расчет прогресса и детальный отчет для покупателя.</li>
+                        <li><strong>Реестр сокровищ</strong> — хронологический лог редких находок с точной секундой матча и типом контейнера.</li>
+                        <li><strong>Защита архива</strong> — постоянное хранение матчей в Документах пользователя и система резервных копий.</li>
+                        <li><strong>Автообновление и безопасность</strong> — проверка актуальной версии и безопасная система лицензирования.</li>
+                    </ul>
+                </div>
+
+                <div class="appstore-action-bar">
+                    <a href="FindingToken.exe" download="FindingToken.exe" class="btn-apple-primary btn-apple-download-main">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Скачать Finding Token (.exe)</span>
+                    </a>
+                    <span class="update-date-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Версия: v1.1.0 • Обновлено
                     </span>
                 </div>
             </div>
@@ -3413,6 +3514,8 @@
                 document.getElementById('modalProjectUniversity').classList.add('active');
             } else if (projectId === 'envy') {
                 document.getElementById('modalProjectEnvy').classList.add('active');
+            } else if (projectId === 'findingtoken') {
+                document.getElementById('modalProjectFindingToken').classList.add('active');
             }
             updateModalOpenState();
         }
@@ -3422,6 +3525,8 @@
                 document.getElementById('modalProjectUniversity').classList.remove('active');
             } else if (projectId === 'envy') {
                 document.getElementById('modalProjectEnvy').classList.remove('active');
+            } else if (projectId === 'findingtoken') {
+                document.getElementById('modalProjectFindingToken').classList.remove('active');
             }
             updateModalOpenState();
         }
@@ -3677,6 +3782,12 @@
                     closeProjectModal('envy');
                     return;
                 }
+
+                const ftModal = document.getElementById('modalProjectFindingToken');
+                if (ftModal && ftModal.classList.contains('active') && e.key === 'Escape') {
+                    closeProjectModal('findingtoken');
+                    return;
+                }
             });
 
             const hash = window.location.hash;
@@ -3686,6 +3797,8 @@
                 setTimeout(() => openProjectModal('university'), 150);
             } else if (hash === '#project-envy') {
                 setTimeout(() => openProjectModal('envy'), 150);
+            } else if (hash === '#project-findingtoken') {
+                setTimeout(() => openProjectModal('findingtoken'), 150);
             }
 
             // Trigger scroll check on load
