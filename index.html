@@ -2979,16 +2979,16 @@
             <div class="appstore-sheet-body">
                 <div class="appstore-section-label">Скриншоты приложения</div>
                 <div class="appstore-gallery-reel">
-                    <div class="appstore-screenshot-item wide-desktop">
+                    <div class="appstore-screenshot-item wide-desktop" onclick="openProjectScreenshot('findingtoken', 0)">
                         <img src="uploads/ft_screen_dashboard.png" alt="Главная / Обзор">
                     </div>
-                    <div class="appstore-screenshot-item wide-desktop">
-                        <img src="uploads/ft_screen_analytics.png" alt="Аналитика и Отчёты">
+                    <div class="appstore-screenshot-item wide-desktop" onclick="openProjectScreenshot('findingtoken', 1)">
+                        <img src="uploads/ft_screen_analytics.png" alt="Аналитика">
                     </div>
-                    <div class="appstore-screenshot-item wide-desktop">
+                    <div class="appstore-screenshot-item wide-desktop" onclick="openProjectScreenshot('findingtoken', 2)">
                         <img src="uploads/ft_screen_matches.png" alt="История матчей">
                     </div>
-                    <div class="appstore-screenshot-item wide-desktop">
+                    <div class="appstore-screenshot-item wide-desktop" onclick="openProjectScreenshot('findingtoken', 3)">
                         <img src="uploads/ft_screen_orders.png" alt="Заказы и Гринд">
                     </div>
                 </div>
@@ -3318,8 +3318,8 @@
             const modal = activeModal;
             const maxModalScroll = Math.max(0, modal.scrollHeight - modal.clientHeight);
 
-            const isEnvy = modal.id === 'modalProjectEnvy';
-            const reel = isEnvy ? modal.querySelector('.appstore-gallery-reel') : null;
+            const isReelModal = modal.id === 'modalProjectEnvy' || modal.id === 'modalProjectFindingToken' || modal.id === 'modalProjectUniversity';
+            const reel = isReelModal ? modal.querySelector('.appstore-gallery-reel') : null;
             const maxReelScroll = reel ? Math.max(0, reel.scrollWidth - reel.clientWidth) : 0;
             const hasReel = reel && maxReelScroll > 10;
 
@@ -3482,6 +3482,12 @@
                 { filename: 'uploads/envy_screen_2.png', title: 'Drop & Shelf — перетаскивание файлов' },
                 { filename: 'uploads/envy_screen_3.png', title: 'Быстрые заметки и буфер обмена' },
                 { filename: 'uploads/envy_screen_5.png', title: 'Интеграция SoundCloud Web Player' }
+            ],
+            findingtoken: [
+                { filename: 'uploads/ft_screen_dashboard.png', title: 'Главная / Обзор статистики и сундуков' },
+                { filename: 'uploads/ft_screen_analytics.png', title: 'Аналитика и активность по дням' },
+                { filename: 'uploads/ft_screen_matches.png', title: 'История сыгранных матчей' },
+                { filename: 'uploads/ft_screen_orders.png', title: 'Заказы и прогресс гринда' }
             ]
         };
 
@@ -3512,10 +3518,13 @@
         function openProjectModal(projectId) {
             if (projectId === 'university') {
                 document.getElementById('modalProjectUniversity').classList.add('active');
+                history.replaceState(null, '', '#project-university');
             } else if (projectId === 'envy') {
                 document.getElementById('modalProjectEnvy').classList.add('active');
+                history.replaceState(null, '', '#macos-notch');
             } else if (projectId === 'findingtoken') {
                 document.getElementById('modalProjectFindingToken').classList.add('active');
+                history.replaceState(null, '', '#findingtoken');
             }
             updateModalOpenState();
         }
@@ -3790,15 +3799,30 @@
                 }
             });
 
-            const hash = window.location.hash;
+            const hash = (window.location.hash || '').toLowerCase();
             if (hash === '#catalog') {
                 setTimeout(openCatalogModal, 150);
             } else if (hash === '#project-university') {
                 setTimeout(() => openProjectModal('university'), 150);
-            } else if (hash === '#project-envy') {
+            } else if (hash === '#project-envy' || hash === '#envy' || hash === '#macos-notch') {
                 setTimeout(() => openProjectModal('envy'), 150);
-            } else if (hash === '#project-findingtoken') {
+            } else if (hash === '#project-findingtoken' || hash === '#findingtoken' || hash === '#finding-token') {
                 setTimeout(() => openProjectModal('findingtoken'), 150);
+            } else if (hash === '#download-finding-token' || hash === '#download-ft') {
+                setTimeout(() => {
+                    openProjectModal('findingtoken');
+                    const dlLink = document.createElement('a');
+                    dlLink.href = 'FindingToken.exe';
+                    dlLink.download = 'FindingToken.exe';
+                    document.body.appendChild(dlLink);
+                    dlLink.click();
+                    document.body.removeChild(dlLink);
+                }, 300);
+            } else if (hash === '#about' || hash === '#about-me') {
+                setTimeout(() => {
+                    const el = document.getElementById('about');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
             }
 
             // Trigger scroll check on load
