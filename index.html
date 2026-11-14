@@ -2647,7 +2647,7 @@
                             <div class="portfolio-subline">Коллекция авторских визуалов и дизайна</div>
                         </div>
                     </div>
-                    <p class="portfolio-description">
+                    <p class="portfolio-description" id="galleryCardDescription">
                         Каталог из 17 работ: графический дизайн, моушн-арт, постеры и концепты интерфейсов с возможностью полноэкранного просмотра.
                     </p>
                     <div class="portfolio-tech">
@@ -3059,23 +3059,23 @@
 
     <script>
         const DEFAULT_GALLERY_IMAGES = [
-            { filename: "9ine_site.png", title: "9ine Site Concept" },
-            { filename: "Apple walpaper.png", title: "Apple Wallpaper Aesthetic" },
-            { filename: "arz nkdev.png", title: "Arz Nkdev Design" },
-            { filename: "faceit.png", title: "Faceit Visual Banner" },
-            { filename: "Forum5rp.png", title: "Forum 5RP Interface" },
+            { filename: "9ine_site.png", title: "9Ine Site" },
+            { filename: "Apple walpaper.png", title: "Apple Walpaper" },
+            { filename: "arz nkdev.png", title: "Arz Nkdev" },
+            { filename: "faceit.png", title: "Faceit" },
+            { filename: "Forum5rp.png", title: "Forum5Rp" },
             { filename: "Oilwar pointless.png", title: "Oilwar Pointless" },
-            { filename: "paper nkdev.png", title: "Paper Nkdev Poster" },
-            { filename: "persistance full.png", title: "Persistance Artwork" },
+            { filename: "paper nkdev.png", title: "Paper Nkdev" },
+            { filename: "persistance full.png", title: "Persistance Full" },
             { filename: "Priton pointless.png", title: "Priton Pointless" },
-            { filename: "Social nkdev.png", title: "Social Nkdev Layout" },
-            { filename: "tommy mask.png", title: "Tommy Mask Graphics" },
-            { filename: "Wallpapers Fortnite 1.png", title: "Fortnite Wallpaper I" },
-            { filename: "Wallpapers Fortnite 2.png", title: "Fortnite Wallpaper II" },
-            { filename: "Wallpapers Fortnite 3.png", title: "Fortnite Wallpaper III" },
-            { filename: "Wallpapers Fortnite 4.png", title: "Fortnite Wallpaper IV" },
-            { filename: "Wallpapers Fortnite 5.png", title: "Fortnite Wallpaper V" },
-            { filename: "Wallpapers Fortnite 6.png", title: "Fortnite Wallpaper VI" }
+            { filename: "Social nkdev.png", title: "Social Nkdev" },
+            { filename: "tommy mask.png", title: "Tommy Mask" },
+            { filename: "Wallpapers Fortnite 1.png", title: "Wallpapers Fortnite 1" },
+            { filename: "Wallpapers Fortnite 2.png", title: "Wallpapers Fortnite 2" },
+            { filename: "Wallpapers Fortnite 3.png", title: "Wallpapers Fortnite 3" },
+            { filename: "Wallpapers Fortnite 4.png", title: "Wallpapers Fortnite 4" },
+            { filename: "Wallpapers Fortnite 5.png", title: "Wallpapers Fortnite 5" },
+            { filename: "Wallpapers Fortnite 6.png", title: "Wallpapers Fortnite 6" }
         ];
 
         let currentGalleryImages = DEFAULT_GALLERY_IMAGES;
@@ -3654,10 +3654,31 @@
             renderCatalogGrid();
         }
 
+        function updateWorksCountDisplay(count) {
+            const pill = document.querySelector('.catalog-count-pill');
+            if (pill) {
+                const n = count;
+                const n_abs = Math.abs(n);
+                let word = 'работ';
+                if (n_abs % 100 < 11 || n_abs % 100 > 14) {
+                    if (n_abs % 10 === 1) word = 'работа';
+                    else if (n_abs % 10 >= 2 && n_abs % 10 <= 4) word = 'работы';
+                }
+                pill.textContent = `${n} ${word}`;
+            }
+            const desc = document.getElementById('galleryCardDescription');
+            if (desc) {
+                const n_abs = Math.abs(count);
+                const word = (n_abs % 100 !== 11 && n_abs % 10 === 1) ? 'работы' : 'работ';
+                desc.innerHTML = desc.innerHTML.replace(/Каталог из \d+ (?:работ|работы)/, `Каталог из ${count} ${word}`);
+            }
+        }
+
         function renderCatalogGrid() {
             const grid = document.getElementById('catalogGrid');
             if (!grid) return;
             grid.innerHTML = '';
+            updateWorksCountDisplay(currentGalleryImages.length);
 
             currentGalleryImages.forEach((img, idx) => {
                 const item = document.createElement('div');
