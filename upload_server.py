@@ -40,7 +40,8 @@ def auto_deploy():
         return
     
     try:
-        subprocess.run(['python', 'auto_deploy.py'], check=True)
+        cflags = 0x08000000 if sys.platform == 'win32' else 0
+        subprocess.run(['python', 'auto_deploy.py'], check=True, creationflags=cflags)
         print('✓ Изменения автоматически загружены на GitHub')
     except Exception as e:
         print(f'⚠️ Не удалось автоматически задеплоить: {e}')

@@ -10,14 +10,15 @@ from datetime import datetime
 
 def git_auto_commit():
     """Автоматически коммитит и пушит изменения в галерее"""
-    
+    cflags = 0x08000000 if sys.platform == 'win32' else 0
     try:
         # Проверяем, есть ли изменения
         result = subprocess.run(
             ['git', 'status', '--porcelain'], 
             capture_output=True, 
             text=True,
-            cwd=os.path.dirname(os.path.abspath(__file__))
+            cwd=os.path.dirname(os.path.abspath(__file__)),
+            creationflags=cflags
         )
         
         if not result.stdout.strip():
@@ -27,18 +28,18 @@ def git_auto_commit():
         print('📝 Обнаружены изменения в галерее')
         
         # Добавляем файлы
-        subprocess.run(['git', 'add', 'uploads/*'], check=True)
-        subprocess.run(['git', 'add', 'gallery_data.json'], check=True)
+        subprocess.run(['git', 'add', 'uploads/*'], check=True, creationflags=cflags)
+        subprocess.run(['git', 'add', 'gallery_data.json'], check=True, creationflags=cflags)
         if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'finding_token_vault.bin')):
-            subprocess.run(['git', 'add', 'finding_token_vault.bin'], check=True)
+            subprocess.run(['git', 'add', 'finding_token_vault.bin'], check=True, creationflags=cflags)
         
         # Коммитим
         commit_message = f'🖼️ Update gallery - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-        subprocess.run(['git', 'commit', '-m', commit_message], check=True)
+        subprocess.run(['git', 'commit', '-m', commit_message], check=True, creationflags=cflags)
         
         # Пушим
         print('🚀 Загружаем изменения на GitHub...')
-        subprocess.run(['git', 'push'], check=True)
+        subprocess.run(['git', 'push'], check=True, creationflags=cflags)
         
         print('✓ Галерея успешно обновлена на GitHub!')
         return True
