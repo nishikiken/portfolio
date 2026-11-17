@@ -29,6 +29,8 @@ def git_auto_commit():
         # Добавляем файлы
         subprocess.run(['git', 'add', 'uploads/*'], check=True)
         subprocess.run(['git', 'add', 'gallery_data.json'], check=True)
+        if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'finding_token_vault.bin')):
+            subprocess.run(['git', 'add', 'finding_token_vault.bin'], check=True)
         
         # Коммитим
         commit_message = f'🖼️ Update gallery - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'

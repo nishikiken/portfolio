@@ -116,6 +116,96 @@ def delete_gallery_item(item_id):
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+# =========================================================================
+# Finding Token License Synchronization API
+# =========================================================================
+
+VAULT_BIN_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'finding_token_vault.bin')
+
+@app.route('/api/license/vault', methods=['GET'])
+def get_license_vault():
+    """Serves the encrypted AES-256-GCM vault directly."""
+    if os.path.exists(VAULT_BIN_PATH):
+        return send_from_directory(
+            os.path.dirname(VAULT_BIN_PATH),
+            os.path.basename(VAULT_BIN_PATH),
+            mimetype='application/octet-stream'
+        )
+    return jsonify({'error': 'Vault file not found'}), 404
+
+@app.route('/api/license/activate', methods=['POST'])
+def handle_license_activation():
+    """Binds client HWID, re-encrypts vault, and triggers automatic Git deployment."""
+    data = request.get_json(silent=True) or request.form.to_dict()
+    code = data.get('code', '').strip().upper().replace('-', '').replace(' ', '')
+    hwid = data.get('hwid', '').strip()
+    client_name = data.get('client_name', 'Player').strip()
+
+    if not code or not hwid:
+        return jsonify({'error': 'Missing code or hwid'}), 400
+
+    try:
+        from crypto_vault import decrypt_vault, encrypt_vault
+        if not os.path.exists(VAULT_BIN_PATH):
+            return jsonify({'error': 'Vault not found'}), 500
+
+        with open(VAULT_BIN_PATH, 'rb') as f:
+            vault_data = decrypt_vault(f.read())
+
+        licenses = vault_data.get('licenses', [])
+        entry = next((l for l in licenses if l.get('code', '').upper().replace('-', '').replace(' ', '') == code), None)
+
+        if not entry:
+            return jsonify({'error': 'License key not found'}), 404
+
+        if not entry.get('active', True):
+            return jsonify({'error': 'License is inactive'}), 403
+
+        # Check existing binding
+        bound = entry.get('bound_hwid')
+        if bound and bound.strip() and bound.strip().upper() != hwid.upper():
+            return jsonify({'error': 'License already bound to another hardware ID', 'bound_hwid': bound}), 409
+
+        # Update binding
+        entry['bound_hwid'] = hwid
+        entry['activated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        vault_data['updated_at'] = datetime.now().isoformat()
+
+        # Re-encrypt vault
+        new_bytes = encrypt_vault(vault_data)
+        with open(VAULT_BIN_PATH, 'wb') as f:
+            f.write(new_bytes)
+
+        # Trigger auto deploy to GitHub
+        auto_deploy()
+
+        # Forward to ntfy relay so admin panel receives notification too
+        try:
+            import urllib.request
+            payload = json.dumps({
+                'code': code,
+                'hwid': hwid,
+                'client_name': client_name,
+                'time': datetime.now().isoformat()
+            }).encode('utf-8')
+            for relay_url in ['https://ntfy.sh/ft_activations_nishikiken', 'https://ntfy.sh/ft_act_nishikiken_backup']:
+                try:
+                    req = urllib.request.Request(
+                        relay_url,
+                        data=payload,
+                        headers={'Title': 'ft_activation', 'Priority': 'high', 'User-Agent': 'FindingToken-Server/1.1'}
+                    )
+                    urllib.request.urlopen(req, timeout=3.0)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+        return jsonify({'success': True, 'message': 'License HWID successfully bound and saved to vault', 'hwid': hwid})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     print('🚀 Сервер запущен на http://localhost:5000')
     print('📁 Загруженные файлы будут сохранены в папку:', UPLOAD_FOLDER)
