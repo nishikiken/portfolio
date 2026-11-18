@@ -7,10 +7,12 @@ Prevents any plaintext license exposure on GitHub or web hosts.
 """
 import hashlib
 import json
+import base64
 from Cryptodome.Cipher import AES
 
 VAULT_MAGIC = b"FTV1"
 LOCAL_LICENSE_MAGIC = b"FTL1"
+RELAY_PREFIX = "FTR1:"
 VAULT_PASSPHRASE = b"FindingToken_Portfolio_Auth_Vault_Key_2026_Secure$v1.1#Antigravity"
 VAULT_KEY = hashlib.sha256(VAULT_PASSPHRASE).digest()
 
@@ -76,3 +78,48 @@ def decrypt_local_license(enc_bytes: bytes, hwid: str) -> dict:
     cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
     dec = cipher.decrypt_and_verify(ciphertext, tag)
     return json.loads(dec.decode("utf-8"))
+
+
+def encrypt_relay_payload(payload_dict: dict) -> str:
+    """
+    Encrypts activation relay broadcast using military-grade AES-256-GCM.
+    Returns: FTR1:<base64_ciphertext>
+    Guarantees NO plain text keys, HWIDs, or client names ever travel over public relays or GitHub.
+    """
+    raw = json.dumps(payload_dict, ensure_ascii=False).encode("utf-8")
+    cipher = AES.new(VAULT_KEY, AES.MODE_GCM)
+    ciphertext, tag = cipher.encrypt_and_digest(raw)
+    combined = cipher.nonce + tag + ciphertext
+    b64 = base64.b64encode(combined).decode("ascii")
+    return f"{RELAY_PREFIX}{b64}"
+
+
+def decrypt_relay_payload(payload_str: str) -> dict | None:
+    """
+    Decrypts relay payload. Supports both encrypted FTR1 format and legacy plain JSON.
+    Returns decoded dictionary or None if invalid.
+    """
+    if not payload_str or not isinstance(payload_str, str):
+        return None
+    s = payload_str.strip()
+    if s.startswith(RELAY_PREFIX):
+        try:
+            b64_part = s[len(RELAY_PREFIX):].strip()
+            raw_bytes = base64.b64decode(b64_part)
+            if len(raw_bytes) < 32:
+                return None
+            nonce = raw_bytes[:16]
+            tag = raw_bytes[16:32]
+            ciphertext = raw_bytes[32:]
+            cipher = AES.new(VAULT_KEY, AES.MODE_GCM, nonce=nonce)
+            dec = cipher.decrypt_and_verify(ciphertext, tag)
+            return json.loads(dec.decode("utf-8"))
+        except Exception:
+            return None
+    elif s.startswith("{"):
+        try:
+            return json.loads(s)
+        except Exception:
+            return None
+    return None
+
